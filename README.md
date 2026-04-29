@@ -1,11 +1,13 @@
 # Radiant Classes Website
 
-This project is ready to host on GitHub Pages or Render.
+This project is ready to host on GitHub Pages or Render, and it can use Firebase for live demo submissions and admin login.
 
 ## Files
 
 - `index.html` - main website
 - `admin.html` - admin panel
+- `firebase-config.js` - Firebase project settings
+- `render.yaml` - Render static site configuration
 
 ## Publish On GitHub Pages
 
@@ -13,6 +15,7 @@ This project is ready to host on GitHub Pages or Render.
 2. Upload these files to the repository root:
    - `index.html`
    - `admin.html`
+   - `firebase-config.js`
    - `.nojekyll`
    - `README.md`
 3. Open the repository on GitHub.
@@ -28,16 +31,49 @@ Your live site URL will look like:
 
 `https://your-github-username.github.io/your-repository-name/`
 
-## Important Note About The Admin Panel
+## Firebase Setup
 
-The current `admin.html` uses browser `localStorage`.
+Before the live form and admin panel work online, complete these Firebase steps:
 
-That means:
+1. Create a Firebase project at the Firebase console.
+2. Add a `Web App` to the project.
+3. Copy the Firebase config values into `firebase-config.js`.
+4. In `firebase-config.js`, also set:
+   - `window.RADIANT_ADMIN_EMAIL` to your real admin email
+5. In Firebase Authentication:
+   - enable `Email/Password`
+   - enable `Google`
+6. Create the admin user in Firebase Authentication with the same email as `window.RADIANT_ADMIN_EMAIL`.
+7. In Authentication -> Settings -> Authorized domains, add your live domain:
+   - `radiant-classes.onrender.com`
+8. Create a Cloud Firestore database in production mode or test mode.
+9. Add these Firestore security rules and replace the email with your real admin email:
 
-- demo form submissions are saved only in the same browser where the form was submitted
-- the admin panel will not collect all visitor data on a live public website
+```txt
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /demoRequests/{document=**} {
+      allow create: if true;
+      allow read, delete: if request.auth != null
+        && request.auth.token.email == "admin@example.com";
+    }
 
-If you want live enquiry data from all users, the next step is connecting the form to a real backend such as Firebase.
+    match /signinRequests/{document=**} {
+      allow create: if true;
+      allow read, delete: if request.auth != null
+        && request.auth.token.email == "admin@example.com";
+    }
+  }
+}
+```
+
+After this setup:
+
+- `Book Free Demo Session` saves online in Firestore
+- the admin panel reads live enquiry data from Firestore
+- admin login uses Firebase Authentication
+- student popup sign-in supports Google and Email/Password
 
 ## Publish On Render
 
@@ -45,6 +81,7 @@ If you want live enquiry data from all users, the next step is connecting the fo
 2. Upload these files to the repository root:
    - `index.html`
    - `admin.html`
+   - `firebase-config.js`
    - `.nojekyll`
    - `README.md`
    - `render.yaml`
@@ -63,20 +100,26 @@ Your Render URL will look similar to:
 
 `https://radiant-classes.onrender.com`
 
-## Current Admin Login
+## Update Firebase Config
 
-- Admin ID: `radiantadmin`
-- Password: `radiant123`
+Edit `firebase-config.js` and replace the placeholder values:
 
-You can change these inside `admin.html`.
+```js
+window.RADIANT_FIREBASE_CONFIG = {
+  apiKey: "YOUR_FIREBASE_API_KEY",
+  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT_ID.firebasestorage.app",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
 
-## Important Deployment Note
+window.RADIANT_ADMIN_EMAIL = "admin@example.com";
+```
 
-The admin panel currently works with browser `localStorage`, not a live online database.
+## Admin Login
 
-That means:
+The admin panel now uses Firebase Authentication.
 
-- the website can be hosted publicly on GitHub Pages or Render
-- but admin entries will not become a shared online admin system for all visitors
-
-For a real live admin system, the form should be connected to Firebase or another backend database.
+- open `admin.html`
+- log in with the Firebase admin email and password you created in the Firebase console

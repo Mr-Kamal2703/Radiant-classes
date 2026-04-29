@@ -267,6 +267,12 @@
       font-weight: 600;
     }
 
+    .inline-note {
+      margin-top: 0.85rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
     @media (max-width: 720px) {
       main {
         padding-top: 1.25rem;
@@ -289,8 +295,8 @@
 
       <form id="login-form">
         <label>
-          Admin ID
-          <input id="admin-id" type="text" placeholder="Enter admin ID" required>
+          Admin Email
+          <input id="admin-id" type="email" placeholder="Enter admin email" required>
         </label>
         <label>
           Password
@@ -300,6 +306,7 @@
       </form>
 
       <p class="login-note hidden" id="login-error">Invalid ID or password. Please try again.</p>
+      <p class="inline-note">Use the Firebase admin email configured for this project.</p>
     </div>
   </section>
 
@@ -397,11 +404,34 @@
   </main>
   </div>
 
-  <script>
-    const STORAGE_KEY = "radiantDemoRequests";
-    const SESSION_KEY = "radiantAdminLoggedIn";
-    const ADMIN_ID = "radiantadmin";
-    const ADMIN_PASSWORD = "radiant123";
+  <script src="firebase-config.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signInWithEmailAndPassword,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import {
+      collection,
+      deleteDoc,
+      doc,
+      getDocs,
+      getFirestore,
+      orderBy,
+      query
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = window.RADIANT_FIREBASE_CONFIG || {};
+    const configuredAdminEmail = window.RADIANT_ADMIN_EMAIL || "admin@example.com";
+    const firebaseReady = Boolean(
+      firebaseConfig.apiKey &&
+      firebaseConfig.projectId &&
+      !firebaseConfig.apiKey.startsWith("YOUR_") &&
+      !firebaseConfig.projectId.startsWith("YOUR_")
+    );
+
     const loginScreen = document.getElementById("login-screen");
     const adminApp = document.getElementById("admin-app");
     const loginForm = document.getElementById("login-form");
@@ -416,9 +446,14 @@
     const totalEntries = document.getElementById("total-entries");
     const todayEntries = document.getElementById("today-entries");
     const classSummary = document.getElementById("class-summary");
+    let auth = null;
+    let db = null;
+    let allEntries = [];
 
-    function getEntries() {
-      return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    if (firebaseReady) {
+      const app = initializeApp(firebaseConfig);
+      auth = getAuth(app);
+      db = getFirestore(app);
     }
 
     function showAdminPanel() {
@@ -431,13 +466,12 @@
       loginScreen.classList.remove("hidden");
     }
 
-    function saveEntries(entries) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
-    }
-
     function isToday(dateText) {
-      const entryDate = new Date(dateText);
+      const entryDate = new Date(dateText || "");
       const now = new Date();
+      if (Number.isNaN(entryDate.getTime())) {
+        return false;
+      }
       return entryDate.toDateString() === now.toDateString();
     }
 
@@ -465,15 +499,38 @@
     }
 
     function deleteEntry(id) {
-      const updatedEntries = getEntries().filter(function (entry) {
-        return entry.id !== id;
-      });
-      saveEntries(updatedEntries);
+      return deleteDoc(doc(db, "demoRequests", id));
+    }
+
+    function normalizeEntry(documentSnapshot) {
+      const data = documentSnapshot.data();
+      const submittedAt = data.submittedAt && typeof data.submittedAt.toDate === "function"
+        ? data.submittedAt.toDate().toLocaleString()
+        : (data.submittedAtLabel || "-");
+
+      return {
+        id: documentSnapshot.id,
+        studentName: data.studentName || "-",
+        studentPhone: data.studentPhone || "-",
+        studentClass: data.studentClass || "-",
+        batchTiming: data.batchTiming || "-",
+        message: data.message || "-",
+        submittedAt: submittedAt
+      };
+    }
+
+    async function loadEntries() {
+      if (!db) {
+        return;
+      }
+
+      const entriesQuery = query(collection(db, "demoRequests"), orderBy("submittedAt", "desc"));
+      const snapshot = await getDocs(entriesQuery);
+      allEntries = snapshot.docs.map(normalizeEntry);
       renderEntries();
     }
 
     function renderEntries() {
-      const allEntries = getEntries();
       const searchTerm = searchInput.value.trim().toLowerCase();
       const filteredEntries = allEntries.filter(function (entry) {
         const combined = [
@@ -513,52 +570,82 @@
       });
 
       document.querySelectorAll("[data-entry-id]").forEach(function (button) {
-        button.addEventListener("click", function () {
-          deleteEntry(Number(button.getAttribute("data-entry-id")));
+        button.addEventListener("click", async function () {
+          await deleteEntry(button.getAttribute("data-entry-id"));
+          await loadEntries();
         });
       });
     }
 
     searchInput.addEventListener("input", renderEntries);
 
-    clearAllButton.addEventListener("click", function () {
+    clearAllButton.addEventListener("click", async function () {
       const confirmed = window.confirm("Delete all demo session entries from the admin panel?");
       if (!confirmed) {
         return;
       }
 
-      localStorage.removeItem(STORAGE_KEY);
-      renderEntries();
+      for (const entry of allEntries) {
+        await deleteEntry(entry.id);
+      }
+
+      await loadEntries();
     });
 
-    loginForm.addEventListener("submit", function (event) {
+    loginForm.addEventListener("submit", async function (event) {
       event.preventDefault();
+
+      if (!auth) {
+        loginError.textContent = "Firebase config is missing. Add your Firebase project settings first.";
+        loginError.classList.remove("hidden");
+        return;
+      }
 
       const enteredId = adminIdInput.value.trim();
       const enteredPassword = adminPasswordInput.value;
 
-      if (enteredId === ADMIN_ID && enteredPassword === ADMIN_PASSWORD) {
-        sessionStorage.setItem(SESSION_KEY, "true");
+      try {
+        const credential = await signInWithEmailAndPassword(auth, enteredId, enteredPassword);
+
+        if (credential.user.email !== configuredAdminEmail) {
+          await signOut(auth);
+          loginError.textContent = "This account is not allowed to access the admin panel.";
+          loginError.classList.remove("hidden");
+          return;
+        }
+
         loginError.classList.add("hidden");
         loginForm.reset();
         showAdminPanel();
-        renderEntries();
-        return;
+        await loadEntries();
+      } catch (error) {
+        loginError.textContent = error.message || "Invalid ID or password. Please try again.";
+        loginError.classList.remove("hidden");
       }
-
-      loginError.classList.remove("hidden");
     });
 
-    logoutButton.addEventListener("click", function () {
-      sessionStorage.removeItem(SESSION_KEY);
+    logoutButton.addEventListener("click", async function () {
+      if (auth) {
+        await signOut(auth);
+      }
+      allEntries = [];
       showLoginScreen();
     });
 
-    if (sessionStorage.getItem(SESSION_KEY) === "true") {
-      showAdminPanel();
-      renderEntries();
+    if (!auth) {
+      showLoginScreen();
     } else {
-      showLoginScreen();
+      onAuthStateChanged(auth, async function (user) {
+        if (user && user.email === configuredAdminEmail) {
+          loginError.classList.add("hidden");
+          showAdminPanel();
+          await loadEntries();
+          return;
+        }
+
+        allEntries = [];
+        showLoginScreen();
+      });
     }
   </script>
 </body>

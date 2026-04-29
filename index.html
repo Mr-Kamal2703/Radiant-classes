@@ -568,6 +568,18 @@
       display: block;
     }
 
+    .form-status {
+      margin: 0.85rem 0 0;
+      color: var(--secondary);
+      font-size: 0.92rem;
+      line-height: 1.5;
+      font-weight: 600;
+    }
+
+    .form-status.is-error {
+      color: #c23f15;
+    }
+
     .footer-inner {
       display: flex;
       flex-wrap: wrap;
@@ -914,19 +926,20 @@
       <div class="tag">Student sign in</div>
       <h3>Continue to Radiant Classes</h3>
       <p class="mini-note">
-        Enter your mobile number or continue with Google or Gmail to proceed.
+        Enter your mobile number or continue with Google or Email to proceed.
       </p>
 
-      <form onsubmit="event.preventDefault(); alert('Sign in request received. We will contact you soon.');">
+      <form id="mobile-signin-form">
         <label>
           Mobile Number
           <input type="tel" name="signin-mobile" placeholder="Enter mobile number" required>
         </label>
         <button class="button button-primary" type="submit">Continue with Mobile Number</button>
+        <p class="form-status" id="mobile-signin-status" hidden></p>
       </form>
 
       <div class="modal-actions">
-        <a class="button button-google" href="https://accounts.google.com/signin" target="_blank" rel="noreferrer">Continue with Google</a>
+        <button class="button button-google" type="button" id="google-signin-button">Continue with Google</button>
         <button class="button button-secondary" type="button" id="email-signin-toggle">Continue with Email</button>
       </div>
 
@@ -935,7 +948,12 @@
           Email Address
           <input type="email" name="signin-email" placeholder="Enter email address" required>
         </label>
+        <label>
+          Password
+          <input type="password" name="signin-password" placeholder="Enter password" required>
+        </label>
         <button class="button button-primary" type="submit">Continue with Email</button>
+        <p class="form-status" id="email-signin-status" hidden></p>
       </form>
     </div>
   </div>
@@ -951,15 +969,65 @@
     </div>
   </div>
 
-  <script>
+  <script src="firebase-config.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getAuth,
+      GoogleAuthProvider,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      signInWithPopup
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import {
+      addDoc,
+      collection,
+      getFirestore,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
     const signinModal = document.getElementById("signin-modal");
     const submissionModal = document.getElementById("submission-modal");
     const openSigninButton = document.querySelector("[data-open-signin]");
     const closeSigninButton = document.querySelector("[data-close-signin]");
     const demoForm = document.getElementById("demo-form");
+    const mobileSigninForm = document.getElementById("mobile-signin-form");
+    const mobileSigninStatus = document.getElementById("mobile-signin-status");
+    const googleSigninButton = document.getElementById("google-signin-button");
     const emailSigninToggle = document.getElementById("email-signin-toggle");
     const emailSigninForm = document.getElementById("email-signin-form");
+    const emailSigninStatus = document.getElementById("email-signin-status");
     const backHomeButton = document.getElementById("back-home-button");
+    const firebaseConfig = window.RADIANT_FIREBASE_CONFIG || {};
+    const firebaseReady = Boolean(
+      firebaseConfig.apiKey &&
+      firebaseConfig.projectId &&
+      !firebaseConfig.apiKey.startsWith("YOUR_") &&
+      !firebaseConfig.projectId.startsWith("YOUR_")
+    );
+
+    let auth = null;
+    let db = null;
+    let googleProvider = null;
+
+    if (firebaseReady) {
+      const app = initializeApp(firebaseConfig);
+      auth = getAuth(app);
+      db = getFirestore(app);
+      googleProvider = new GoogleAuthProvider();
+    }
+
+    function updateStatus(element, message, isError) {
+      element.hidden = false;
+      element.textContent = message;
+      element.classList.toggle("is-error", Boolean(isError));
+    }
+
+    function clearStatus(element) {
+      element.hidden = true;
+      element.textContent = "";
+      element.classList.remove("is-error");
+    }
 
     function openSigninModal(event) {
       event.preventDefault();
@@ -1012,39 +1080,111 @@
       window.location.href = "#top";
     });
 
+    mobileSigninForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      clearStatus(mobileSigninStatus);
+
+      if (!db) {
+        updateStatus(mobileSigninStatus, "Firebase setup is still pending. Add your Firebase config to enable this form.", true);
+        return;
+      }
+
+      try {
+        const formData = new FormData(mobileSigninForm);
+        await addDoc(collection(db, "signinRequests"), {
+          mobileNumber: formData.get("signin-mobile"),
+          source: "website-popup",
+          createdAt: serverTimestamp()
+        });
+        mobileSigninForm.reset();
+        updateStatus(mobileSigninStatus, "Mobile sign-in request received. We will contact you soon.", false);
+      } catch (error) {
+        updateStatus(mobileSigninStatus, error.message || "Could not save the mobile sign-in request right now.", true);
+      }
+    });
+
+    googleSigninButton.addEventListener("click", async function () {
+      clearStatus(emailSigninStatus);
+
+      if (!auth || !googleProvider) {
+        updateStatus(emailSigninStatus, "Firebase setup is still pending. Add your Firebase config to enable Google sign-in.", true);
+        return;
+      }
+
+      try {
+        await signInWithPopup(auth, googleProvider);
+        emailSigninForm.reset();
+        emailSigninForm.classList.remove("is-open");
+        closeSigninModal();
+      } catch (error) {
+        updateStatus(emailSigninStatus, error.message || "Google sign-in could not be completed.", true);
+      }
+    });
+
     emailSigninToggle.addEventListener("click", function () {
+      clearStatus(emailSigninStatus);
       emailSigninForm.classList.toggle("is-open");
     });
 
-    emailSigninForm.addEventListener("submit", function (event) {
+    emailSigninForm.addEventListener("submit", async function (event) {
       event.preventDefault();
-      const email = new FormData(emailSigninForm).get("signin-email");
-      alert("Email sign-in request received for: " + email);
+
+      if (!auth) {
+        updateStatus(emailSigninStatus, "Firebase setup is still pending. Add your Firebase config to enable email sign-in.", true);
+        return;
+      }
+
+      const formData = new FormData(emailSigninForm);
+      const email = String(formData.get("signin-email") || "").trim();
+      const password = String(formData.get("signin-password") || "");
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+      } catch (error) {
+        if (error.code === "auth/invalid-credential" || error.code === "auth/user-not-found") {
+          try {
+            await createUserWithEmailAndPassword(auth, email, password);
+          } catch (createError) {
+            updateStatus(emailSigninStatus, createError.message || "Email sign-in could not be completed.", true);
+            return;
+          }
+        } else {
+          updateStatus(emailSigninStatus, error.message || "Email sign-in could not be completed.", true);
+          return;
+        }
+      }
+
       emailSigninForm.reset();
       emailSigninForm.classList.remove("is-open");
       closeSigninModal();
     });
 
-    demoForm.addEventListener("submit", function (event) {
+    demoForm.addEventListener("submit", async function (event) {
       event.preventDefault();
 
+      if (!db) {
+        alert("Firebase setup is still pending. Add your Firebase config to enable online demo submissions.");
+        return;
+      }
+
       const formData = new FormData(demoForm);
-      const submission = {
-        id: Date.now(),
-        studentName: formData.get("studentName"),
-        studentPhone: formData.get("studentPhone"),
-        studentClass: formData.get("studentClass"),
-        batchTiming: formData.get("batchTiming"),
-        message: formData.get("message"),
-        submittedAt: new Date().toLocaleString()
-      };
+      try {
+        await addDoc(collection(db, "demoRequests"), {
+          studentName: formData.get("studentName"),
+          studentPhone: formData.get("studentPhone"),
+          studentClass: formData.get("studentClass"),
+          batchTiming: formData.get("batchTiming"),
+          message: formData.get("message"),
+          submittedAt: serverTimestamp(),
+          submittedAtLabel: new Date().toLocaleString(),
+          source: "website-form"
+        });
 
-      const existingEntries = JSON.parse(localStorage.getItem("radiantDemoRequests") || "[]");
-      existingEntries.unshift(submission);
-      localStorage.setItem("radiantDemoRequests", JSON.stringify(existingEntries));
-
-      demoForm.reset();
-      openSubmissionModal();
+        demoForm.reset();
+        openSubmissionModal();
+      } catch (error) {
+        alert(error.message || "Your submission could not be saved right now. Please try again.");
+      }
     });
   </script>
 </body>
