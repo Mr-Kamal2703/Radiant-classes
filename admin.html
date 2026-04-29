@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Radiant Classes Admin Panel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --surface: #ffffff;
+      --text: #1a2433;
+      --muted: #647084;
+      --primary: #f15a24;
+      --secondary: #11805d;
+      --line: rgba(26, 36, 51, 0.08);
+      --shadow: 0 24px 56px rgba(24, 33, 47, 0.1);
+      --radius-xl: 24px;
+      --radius-lg: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Outfit", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(241, 90, 36, 0.08), transparent 24%),
+        linear-gradient(180deg, #fffefb 0%, #f6f7fb 46%, #edf8f3 100%);
+    }
+
+    .container {
+      width: min(1180px, calc(100% - 2rem));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      padding: 1.2rem 0;
+      background: rgba(255, 255, 255, 0.86);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .topbar-inner,
+    .hero-actions,
+    .stats-grid,
+    .panel-grid,
+    .header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      font-family: "Sora", sans-serif;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0.85rem 1.2rem;
+      border-radius: 999px;
+      border: 0;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+    }
+
+    .button-primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), #ff7d37);
+      box-shadow: 0 14px 28px rgba(241, 90, 36, 0.24);
+    }
+
+    .button-secondary {
+      color: var(--text);
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 24px rgba(24, 33, 47, 0.06);
+    }
+
+    main {
+      padding: 2rem 0 3rem;
+    }
+
+    .hero-card,
+    .panel,
+    .table-card {
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      padding: 1.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      font-family: "Sora", sans-serif;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      margin-top: 0.5rem;
+    }
+
+    p {
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .stats-grid {
+      margin-top: 1.5rem;
+    }
+
+    .stat {
+      flex: 1 1 220px;
+      padding: 1.2rem;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, #fff, #fff8f4);
+      border: 1px solid var(--line);
+    }
+
+    .stat strong {
+      display: block;
+      font-family: "Sora", sans-serif;
+      font-size: 1.8rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .panel-grid {
+      align-items: stretch;
+      margin-bottom: 1.5rem;
+    }
+
+    .panel {
+      flex: 1 1 320px;
+      padding: 1.4rem;
+    }
+
+    label {
+      display: grid;
+      gap: 0.45rem;
+      font-weight: 600;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      font: inherit;
+    }
+
+    .table-card {
+      padding: 1.4rem;
+      overflow: hidden;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 860px;
+    }
+
+    th,
+    td {
+      padding: 1rem 0.85rem;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .empty-state {
+      padding: 2rem 1rem;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.45rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(17, 128, 93, 0.1);
+      color: var(--secondary);
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .small-button {
+      padding: 0.55rem 0.85rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fff;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 700;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .login-shell {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 2rem 1rem;
+    }
+
+    .login-card {
+      width: min(100%, 460px);
+      padding: 1.8rem;
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+    }
+
+    .login-card form {
+      display: grid;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .login-note {
+      margin: 0.9rem 0 0;
+      color: #c23f15;
+      font-weight: 600;
+    }
+
+    @media (max-width: 720px) {
+      main {
+        padding-top: 1.25rem;
+      }
+
+      .hero-card,
+      .panel,
+      .table-card {
+        padding: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="login-shell" id="login-screen">
+    <div class="login-card">
+      <span class="badge">Secure Access</span>
+      <h1>Admin panel login</h1>
+      <p>Enter your admin ID and password to view free demo session data.</p>
+
+      <form id="login-form">
+        <label>
+          Admin ID
+          <input id="admin-id" type="text" placeholder="Enter admin ID" required>
+        </label>
+        <label>
+          Password
+          <input id="admin-password" type="password" placeholder="Enter password" required>
+        </label>
+        <button class="button button-primary" type="submit">Login</button>
+      </form>
+
+      <p class="login-note hidden" id="login-error">Invalid ID or password. Please try again.</p>
+    </div>
+  </section>
+
+  <div id="admin-app" class="hidden">
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand">Radiant Classes Admin Panel</div>
+      <div class="hero-actions">
+        <a class="button button-secondary" href="index.html">Back to Website</a>
+        <button class="button button-secondary" id="logout-button" type="button">Logout</button>
+        <button class="button button-primary" id="clear-all" type="button">Clear All Entries</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <section class="hero-card">
+        <span class="badge">Book Free Demo Session Data</span>
+        <h1>View student enquiries in one place</h1>
+        <p>
+          This admin page reads form submissions saved from the website and shows student name, phone, class,
+          batch timing, message, and submission time.
+        </p>
+
+        <div class="stats-grid">
+          <div class="stat">
+            <strong id="total-entries">0</strong>
+            <span>Total enquiries</span>
+          </div>
+          <div class="stat">
+            <strong id="today-entries">0</strong>
+            <span>Entries added today</span>
+          </div>
+          <div class="stat">
+            <strong id="class-summary">-</strong>
+            <span>Most requested class</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel-grid">
+        <div class="panel">
+          <div class="header-row">
+            <div>
+              <h3>Search entries</h3>
+              <p>Filter by student name, phone, class, or batch timing.</p>
+            </div>
+          </div>
+          <label>
+            Search
+            <input id="search-input" type="text" placeholder="Type to search...">
+          </label>
+        </div>
+
+        <div class="panel">
+          <h3>How it works</h3>
+          <p>
+            Every time someone submits the demo form on the main website, the data is stored in this browser's
+            local storage. Open the same browser on this computer to view the latest entries here.
+          </p>
+        </div>
+      </section>
+
+      <section class="table-card">
+        <div class="header-row" style="margin-bottom: 1rem;">
+          <div>
+            <h3>Demo session enquiries</h3>
+            <p>Newest submissions appear first.</p>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Student Name</th>
+                <th>Phone</th>
+                <th>Class</th>
+                <th>Batch Timing</th>
+                <th>Message</th>
+                <th>Submitted At</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="entries-body"></tbody>
+          </table>
+        </div>
+
+        <div class="empty-state" id="empty-state" hidden>
+          No demo session entries found yet.
+        </div>
+      </section>
+    </div>
+  </main>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "radiantDemoRequests";
+    const SESSION_KEY = "radiantAdminLoggedIn";
+    const ADMIN_ID = "radiantadmin";
+    const ADMIN_PASSWORD = "radiant123";
+    const loginScreen = document.getElementById("login-screen");
+    const adminApp = document.getElementById("admin-app");
+    const loginForm = document.getElementById("login-form");
+    const adminIdInput = document.getElementById("admin-id");
+    const adminPasswordInput = document.getElementById("admin-password");
+    const loginError = document.getElementById("login-error");
+    const logoutButton = document.getElementById("logout-button");
+    const entriesBody = document.getElementById("entries-body");
+    const emptyState = document.getElementById("empty-state");
+    const searchInput = document.getElementById("search-input");
+    const clearAllButton = document.getElementById("clear-all");
+    const totalEntries = document.getElementById("total-entries");
+    const todayEntries = document.getElementById("today-entries");
+    const classSummary = document.getElementById("class-summary");
+
+    function getEntries() {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    }
+
+    function showAdminPanel() {
+      loginScreen.classList.add("hidden");
+      adminApp.classList.remove("hidden");
+    }
+
+    function showLoginScreen() {
+      adminApp.classList.add("hidden");
+      loginScreen.classList.remove("hidden");
+    }
+
+    function saveEntries(entries) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+    }
+
+    function isToday(dateText) {
+      const entryDate = new Date(dateText);
+      const now = new Date();
+      return entryDate.toDateString() === now.toDateString();
+    }
+
+    function getMostRequestedClass(entries) {
+      if (!entries.length) {
+        return "-";
+      }
+
+      const counts = {};
+      entries.forEach(function (entry) {
+        counts[entry.studentClass] = (counts[entry.studentClass] || 0) + 1;
+      });
+
+      return Object.keys(counts).sort(function (a, b) {
+        return counts[b] - counts[a];
+      })[0];
+    }
+
+    function updateStats(entries) {
+      totalEntries.textContent = entries.length;
+      todayEntries.textContent = entries.filter(function (entry) {
+        return isToday(entry.submittedAt);
+      }).length;
+      classSummary.textContent = getMostRequestedClass(entries);
+    }
+
+    function deleteEntry(id) {
+      const updatedEntries = getEntries().filter(function (entry) {
+        return entry.id !== id;
+      });
+      saveEntries(updatedEntries);
+      renderEntries();
+    }
+
+    function renderEntries() {
+      const allEntries = getEntries();
+      const searchTerm = searchInput.value.trim().toLowerCase();
+      const filteredEntries = allEntries.filter(function (entry) {
+        const combined = [
+          entry.studentName,
+          entry.studentPhone,
+          entry.studentClass,
+          entry.batchTiming,
+          entry.message,
+          entry.submittedAt
+        ].join(" ").toLowerCase();
+
+        return combined.includes(searchTerm);
+      });
+
+      updateStats(allEntries);
+      entriesBody.innerHTML = "";
+
+      if (!filteredEntries.length) {
+        emptyState.hidden = false;
+        return;
+      }
+
+      emptyState.hidden = true;
+
+      filteredEntries.forEach(function (entry) {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${entry.studentName || "-"}</td>
+          <td>${entry.studentPhone || "-"}</td>
+          <td>${entry.studentClass || "-"}</td>
+          <td>${entry.batchTiming || "-"}</td>
+          <td>${entry.message || "-"}</td>
+          <td>${entry.submittedAt || "-"}</td>
+          <td><button class="small-button" type="button" data-entry-id="${entry.id}">Delete</button></td>
+        `;
+        entriesBody.appendChild(row);
+      });
+
+      document.querySelectorAll("[data-entry-id]").forEach(function (button) {
+        button.addEventListener("click", function () {
+          deleteEntry(Number(button.getAttribute("data-entry-id")));
+        });
+      });
+    }
+
+    searchInput.addEventListener("input", renderEntries);
+
+    clearAllButton.addEventListener("click", function () {
+      const confirmed = window.confirm("Delete all demo session entries from the admin panel?");
+      if (!confirmed) {
+        return;
+      }
+
+      localStorage.removeItem(STORAGE_KEY);
+      renderEntries();
+    });
+
+    loginForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const enteredId = adminIdInput.value.trim();
+      const enteredPassword = adminPasswordInput.value;
+
+      if (enteredId === ADMIN_ID && enteredPassword === ADMIN_PASSWORD) {
+        sessionStorage.setItem(SESSION_KEY, "true");
+        loginError.classList.add("hidden");
+        loginForm.reset();
+        showAdminPanel();
+        renderEntries();
+        return;
+      }
+
+      loginError.classList.remove("hidden");
+    });
+
+    logoutButton.addEventListener("click", function () {
+      sessionStorage.removeItem(SESSION_KEY);
+      showLoginScreen();
+    });
+
+    if (sessionStorage.getItem(SESSION_KEY) === "true") {
+      showAdminPanel();
+      renderEntries();
+    } else {
+      showLoginScreen();
+    }
+  </script>
+</body>
+</html>

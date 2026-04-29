@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Radiant Classes | Coaching for Class 5th to 10th</title>
+  <meta
+    name="description"
+    content="Radiant Classes in Plot no - 420, Sector - 4, City centre, Bokaro Steel City, Jharkhand offers focused coaching for Class 5th to 10th with Mathematics, Science, and English along with an easy student sign-in option."
+  >
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fff9f1;
+      --surface: rgba(255, 255, 255, 0.82);
+      --surface-strong: #ffffff;
+      --text: #18212f;
+      --muted: #586273;
+      --primary: #f15a24;
+      --primary-dark: #cf4615;
+      --secondary: #0f7b6c;
+      --accent: #ffd66b;
+      --line: rgba(24, 33, 47, 0.1);
+      --shadow: 0 24px 70px rgba(28, 36, 52, 0.12);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --max: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Outfit", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(255, 214, 107, 0.75), transparent 28%),
+        radial-gradient(circle at 85% 15%, rgba(241, 90, 36, 0.18), transparent 22%),
+        linear-gradient(180deg, #fff7eb 0%, #fdfdfd 45%, #eef9f6 100%);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .container {
+      width: min(var(--max), calc(100% - 2rem));
+      margin: 0 auto;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: rgba(255, 249, 241, 0.82);
+      border-bottom: 1px solid rgba(24, 33, 47, 0.06);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      font-family: "Sora", sans-serif;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .brand-mark {
+      width: 2.8rem;
+      aspect-ratio: 1;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), #ff8c42);
+      box-shadow: 0 12px 30px rgba(241, 90, 36, 0.28);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      min-height: 48px;
+      padding: 0.85rem 1.3rem;
+      border-radius: 999px;
+      border: 0;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 700;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+    }
+
+    .button-primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), #ff7b2c);
+      box-shadow: 0 14px 32px rgba(241, 90, 36, 0.25);
+    }
+
+    .button-secondary {
+      color: var(--text);
+      background: #fff;
+      border: 1px solid rgba(24, 33, 47, 0.08);
+      box-shadow: 0 10px 24px rgba(24, 33, 47, 0.07);
+    }
+
+    .button-whatsapp {
+      color: #ffffff;
+      background: linear-gradient(135deg, #1fa855, #159447);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 14px 30px rgba(24, 168, 85, 0.28);
+      font-weight: 800;
+    }
+
+    .button-google {
+      color: var(--text);
+      background: #ffffff;
+      border: 1px solid rgba(24, 33, 47, 0.1);
+      box-shadow: 0 10px 24px rgba(24, 33, 47, 0.08);
+    }
+
+    .hero {
+      padding: 5rem 0 4rem;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.55rem 0.9rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid rgba(24, 33, 47, 0.08);
+      color: var(--secondary);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      font-family: "Sora", sans-serif;
+      line-height: 1.05;
+    }
+
+    h1 {
+      margin-top: 1rem;
+      font-size: clamp(2.8rem, 5vw, 5rem);
+    }
+
+    .hero-copy p,
+    .section-copy,
+    .card p,
+    .info-card p,
+    .footer-note {
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 1.03rem;
+    }
+
+    .hero-copy p {
+      max-width: 62ch;
+      margin: 1.25rem 0 0;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+      margin-top: 1.8rem;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .stat {
+      padding: 1.05rem 1rem;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid rgba(24, 33, 47, 0.08);
+      box-shadow: 0 10px 24px rgba(24, 33, 47, 0.05);
+    }
+
+    .stat strong {
+      display: block;
+      font-family: "Sora", sans-serif;
+      font-size: 1.45rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .hero-card {
+      position: relative;
+      padding: 2rem;
+      border-radius: 32px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.84)),
+        linear-gradient(135deg, #fff3dd, #eefaf7);
+      border: 1px solid rgba(24, 33, 47, 0.08);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero-card::before,
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.9;
+    }
+
+    .hero-card::before {
+      width: 12rem;
+      height: 12rem;
+      background: rgba(255, 214, 107, 0.35);
+      top: -4rem;
+      right: -2rem;
+    }
+
+    .hero-card::after {
+      width: 8rem;
+      height: 8rem;
+      background: rgba(15, 123, 108, 0.12);
+      bottom: -2rem;
+      left: -1rem;
+    }
+
+    .hero-panel {
+      position: relative;
+      display: grid;
+      gap: 1rem;
+      z-index: 1;
+    }
+
+    .panel-strip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      width: fit-content;
+      padding: 0.55rem 0.85rem;
+      border-radius: 999px;
+      color: #fff;
+      background: var(--secondary);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .feature-list,
+    .course-list,
+    .contact-list {
+      display: grid;
+      gap: 0.85rem;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .feature-list li,
+    .course-list li,
+    .contact-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8rem;
+      color: var(--text);
+    }
+
+    .bullet {
+      flex: 0 0 1.8rem;
+      width: 1.8rem;
+      height: 1.8rem;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), #ff8f55);
+      font-size: 0.88rem;
+      font-weight: 800;
+      margin-top: 0.1rem;
+    }
+
+    section {
+      padding: 2rem 0 4rem;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-head h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+    }
+
+    .section-copy {
+      max-width: 58ch;
+      margin-top: 0.8rem;
+    }
+
+    .grid {
+      display: grid;
+      gap: 1.35rem;
+    }
+
+    .about-grid,
+    .courses-grid,
+    .highlights-grid,
+    .contact-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .card,
+    .info-card,
+    .form-card {
+      padding: 1.6rem;
+      border-radius: var(--radius-xl);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .card h3,
+    .info-card h3,
+    .form-card h3 {
+      font-size: 1.45rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .accent-card {
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.84)),
+        linear-gradient(135deg, rgba(255, 214, 107, 0.22), rgba(15, 123, 108, 0.1));
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      margin-bottom: 0.9rem;
+      padding: 0.45rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(241, 90, 36, 0.12);
+      color: var(--primary-dark);
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .subject-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .subject-pills span {
+      padding: 0.7rem 0.95rem;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid rgba(24, 33, 47, 0.08);
+      font-weight: 600;
+    }
+
+    .highlight-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      width: fit-content;
+      margin-bottom: 0.9rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(15, 123, 108, 0.1);
+      color: var(--secondary);
+      font-weight: 700;
+      font-size: 0.86rem;
+    }
+
+    .contact-band {
+      padding: 2rem;
+      border-radius: 34px;
+      background:
+        linear-gradient(135deg, rgba(24, 33, 47, 0.95), rgba(30, 79, 65, 0.92)),
+        linear-gradient(135deg, #172234, #195c4b);
+      color: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .contact-band .section-copy,
+    .contact-band p,
+    .contact-band li,
+    .contact-band a {
+      color: rgba(255, 255, 255, 0.82);
+    }
+
+    .form-card {
+      background: rgba(255, 255, 255, 0.96);
+    }
+
+    form {
+      display: grid;
+      gap: 0.95rem;
+      margin-top: 1rem;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.95rem;
+    }
+
+    label {
+      display: grid;
+      gap: 0.45rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 0.95rem 1rem;
+      border-radius: 16px;
+      border: 1px solid rgba(24, 33, 47, 0.1);
+      background: #fff;
+      font: inherit;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: rgba(241, 90, 36, 0.65);
+      box-shadow: 0 0 0 4px rgba(241, 90, 36, 0.12);
+    }
+
+    textarea {
+      min-height: 122px;
+      resize: vertical;
+    }
+
+    .mini-note {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .footer {
+      padding: 1.5rem 0 2.5rem;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      background: rgba(12, 20, 31, 0.58);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+    }
+
+    .modal.is-open {
+      display: flex;
+    }
+
+    .modal-card {
+      width: min(100%, 460px);
+      padding: 1.6rem;
+      border-radius: 28px;
+      background: #ffffff;
+      box-shadow: 0 28px 60px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(24, 33, 47, 0.08);
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 2.4rem;
+      height: 2.4rem;
+      border-radius: 50%;
+      border: 0;
+      background: rgba(24, 33, 47, 0.08);
+      color: var(--text);
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .modal-actions {
+      display: grid;
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+
+    .confirmation-modal .modal-card {
+      text-align: center;
+    }
+
+    .confirmation-copy {
+      margin: 1rem 0 1.5rem;
+    }
+
+    .email-signin {
+      display: none;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(24, 33, 47, 0.08);
+    }
+
+    .email-signin.is-open {
+      display: block;
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(24, 33, 47, 0.08);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      animation: rise 0.8s ease forwards;
+    }
+
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+
+    @keyframes rise {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .about-grid,
+      .courses-grid,
+      .highlights-grid,
+      .contact-grid,
+      .field-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section-head,
+      .footer-inner {
+        align-items: start;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .nav {
+        flex-wrap: wrap;
+      }
+
+      .nav-links {
+        width: 100%;
+        justify-content: space-between;
+        gap: 0.8rem;
+        font-size: 0.92rem;
+      }
+
+      .hero {
+        padding-top: 3rem;
+      }
+
+      .hero-stats {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: clamp(2.4rem, 12vw, 3.6rem);
+      }
+
+      .contact-band,
+      .card,
+      .info-card,
+      .form-card,
+      .hero-card {
+        padding: 1.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="#top">
+        <span class="brand-mark">R</span>
+        <span>Radiant Classes</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#courses">Courses</a>
+        <a href="#why-us">Why Us</a>
+        <a href="#contact">Contact</a>
+        <a class="button button-primary" href="#signin-modal" data-open-signin>Sign In</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy reveal">
+          <div class="eyebrow">Focused learning for school success</div>
+          <h1>Build strong concepts with <span style="color: var(--primary);">RADIANT CLASSES</span>.</h1>
+          <p>
+            Personal attention, clear teaching, and a steady academic routine for students from Class 5th to 10th.
+            We help learners in Bokaro grow with confidence in Mathematics, Science, and English.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#demo">Book Your Free Demo Session</a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat reveal delay-1">
+              <strong>5th-8th</strong>
+              <span>English, Maths and Science support</span>
+            </div>
+            <div class="stat reveal delay-2">
+              <strong>9th-10th</strong>
+              <span>Focused Mathematics and Science coaching</span>
+            </div>
+            <div class="stat reveal delay-3">
+              <strong>Bokaro</strong>
+              <span>Local guidance with approachable mentoring</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-card reveal delay-2">
+          <div class="hero-panel">
+            <div class="panel-strip">Admissions Open</div>
+            <h2>Smart coaching for school students who need clarity, discipline, and results.</h2>
+            <ul class="feature-list">
+              <li><span class="bullet">1</span><span>Small-batch attention so every student gets noticed.</span></li>
+              <li><span class="bullet">2</span><span>Regular practice, concept revision, and doubt-solving sessions.</span></li>
+              <li><span class="bullet">3</span><span>Class-wise subject plans designed for stronger school performance.</span></li>
+              <li><span class="bullet">4</span><span>Easy sign-in support for students who want to join the right batch quickly.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="why-us">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Designed around student confidence</h2>
+            <p class="section-copy">
+              Inspired by the strongest coaching websites, this experience keeps the message simple:
+              clear subjects, clear support, and an easy path for parents to enquire or register.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid about-grid">
+          <article class="card accent-card reveal">
+            <div class="tag">Our approach</div>
+            <h3>Concept clarity before rote learning</h3>
+            <p>
+              We focus on making students understand the “why” behind every chapter so they can solve
+              questions with confidence in school exams and daily classwork.
+            </p>
+          </article>
+
+          <article class="card reveal delay-1">
+            <div class="tag">For parents</div>
+            <h3>Simple communication and visible progress</h3>
+            <p>
+              Parents want reliability. The structure at Radiant Classes is built around regular study,
+              practice, and timely support to help students stay on track.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="courses">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Courses by class group</h2>
+            <p class="section-copy">
+              Each group gets age-appropriate teaching with subject coverage matched to your requirements.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid courses-grid">
+          <article class="card accent-card reveal">
+            <div class="highlight-badge">Class 5th to 8th</div>
+            <h3>Strong foundations for growing learners</h3>
+            <p>
+              Supportive teaching that builds discipline, vocabulary, calculation speed, and scientific thinking.
+            </p>
+            <div class="subject-pills">
+              <span>English</span>
+              <span>Mathematics</span>
+              <span>Science</span>
+            </div>
+          </article>
+
+          <article class="card reveal delay-1">
+            <div class="highlight-badge">Class 9th & 10th</div>
+            <h3>Focused preparation for important school years</h3>
+            <p>
+              Concept-driven coaching to help students strengthen problem solving and board-oriented understanding.
+            </p>
+            <div class="subject-pills">
+              <span>Mathematics</span>
+              <span>Science</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>What students can expect</h2>
+            <p class="section-copy">
+              The best coaching brands highlight outcomes and structure. Here, we translate that into a local,
+              school-focused learning experience.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid highlights-grid">
+          <article class="info-card reveal">
+            <h3>Regular practice routine</h3>
+            <p>Chapter-wise worksheets, revision support, and a steady rhythm that improves retention.</p>
+          </article>
+
+          <article class="info-card reveal delay-1">
+            <h3>Doubt-solving support</h3>
+            <p>Students get space to ask questions freely and strengthen weak areas without hesitation.</p>
+          </article>
+
+          <article class="info-card reveal delay-2">
+            <h3>Exam-oriented guidance</h3>
+            <p>Preparation is aligned to school expectations so learners improve both accuracy and confidence.</p>
+          </article>
+
+          <article class="info-card reveal delay-3">
+            <h3>Friendly learning atmosphere</h3>
+            <p>A motivating setup where discipline and encouragement work together for better performance.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container grid contact-grid">
+        <div class="contact-band reveal">
+          <div class="tag" style="background: rgba(255,255,255,0.14); color: #fff;">Visit or call us</div>
+          <h2>RADIANT CLASSES</h2>
+          <p class="section-copy">
+            Helping students in Bokaro build stronger basics and better academic confidence from Class 5th to 10th.
+          </p>
+          <ul class="contact-list">
+            <li><span class="bullet">+</span><span><strong>Address:</strong> Plot no - 420, Sector - 4, City centre, Bokaro Steel City, Jharkhand</span></li>
+            <li><span class="bullet">+</span><span><strong>Phone:</strong> <a href="tel:8986840972">8986840972</a></span></li>
+            <li><span class="bullet">+</span><span><strong>Email:</strong> <a href="mailto:radiant1331@gmail.com">radiant1331@gmail.com</a></span></li>
+            <li><span class="bullet">+</span><span><strong>Admission Support:</strong> Book a free demo session below to connect with the institute</span></li>
+          </ul>
+          <div class="hero-actions">
+            <a class="button button-primary" href="tel:8986840972">Call Now</a>
+            <a class="button button-whatsapp" href="https://wa.me/918986840972" target="_blank" rel="noreferrer">Contact on WhatsApp</a>
+          </div>
+        </div>
+
+        <div class="form-card reveal delay-1" id="demo">
+          <div class="tag">Free demo booking</div>
+          <h3>Book your free demo session</h3>
+          <p>
+            Fill in the details and Radiant Classes can contact you about your free demo session and batch timing.
+          </p>
+
+          <form id="demo-form">
+            <div class="field-grid">
+              <label>
+                Student Name
+                <input type="text" name="studentName" placeholder="Enter student name" required>
+              </label>
+              <label>
+                Student Phone
+                <input type="tel" name="studentPhone" placeholder="Enter phone number" required>
+              </label>
+            </div>
+
+            <div class="field-grid">
+              <label>
+                Class
+                <select name="studentClass" required>
+                  <option value="">Select class</option>
+                  <option>Class 5th</option>
+                  <option>Class 6th</option>
+                  <option>Class 7th</option>
+                  <option>Class 8th</option>
+                  <option>Class 9th</option>
+                  <option>Class 10th</option>
+                </select>
+              </label>
+              <label>
+                Batch Timing
+                <select name="batchTiming" required>
+                  <option value="">Select batch timing</option>
+                  <option>Morning Batch</option>
+                  <option>Afternoon Batch</option>
+                  <option>Evening Batch</option>
+                  <option>Weekend Batch</option>
+                </select>
+              </label>
+            </div>
+
+            <label>
+              Message
+              <textarea name="message" placeholder="Share preferred timing or any question"></textarea>
+            </label>
+
+            <button class="button button-primary" type="submit">Book Free Demo Session</button>
+            <p class="mini-note">
+              For faster response, call <a href="tel:8986840972">8986840972</a> directly.
+            </p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>
+        <strong>Radiant Classes</strong>
+        <p class="footer-note">Coaching for Class 5th to 10th in Bokaro Steel City, Jharkhand.</p>
+      </div>
+      <div class="hero-actions" style="margin-top: 0;">
+        <a class="button button-secondary" href="admin.html">Admin Panel</a>
+        <a class="button button-secondary" href="#top">Back to top</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="modal" id="signin-modal" aria-hidden="true">
+    <div class="modal-card">
+      <button class="modal-close" type="button" aria-label="Close sign in popup" data-close-signin>&times;</button>
+      <div class="tag">Student sign in</div>
+      <h3>Continue to Radiant Classes</h3>
+      <p class="mini-note">
+        Enter your mobile number or continue with Google or Gmail to proceed.
+      </p>
+
+      <form onsubmit="event.preventDefault(); alert('Sign in request received. We will contact you soon.');">
+        <label>
+          Mobile Number
+          <input type="tel" name="signin-mobile" placeholder="Enter mobile number" required>
+        </label>
+        <button class="button button-primary" type="submit">Continue with Mobile Number</button>
+      </form>
+
+      <div class="modal-actions">
+        <a class="button button-google" href="https://accounts.google.com/signin" target="_blank" rel="noreferrer">Continue with Google</a>
+        <button class="button button-secondary" type="button" id="email-signin-toggle">Continue with Email</button>
+      </div>
+
+      <form class="email-signin" id="email-signin-form">
+        <label>
+          Email Address
+          <input type="email" name="signin-email" placeholder="Enter email address" required>
+        </label>
+        <button class="button button-primary" type="submit">Continue with Email</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal confirmation-modal" id="submission-modal" aria-hidden="true">
+    <div class="modal-card">
+      <div class="tag">RADIANT CLASSES</div>
+      <h3>Thank you</h3>
+      <p class="confirmation-copy">
+        Your submission has been recieved. We will be in touch and contact you soon.
+      </p>
+      <button class="button button-primary" type="button" id="back-home-button">Back Home</button>
+    </div>
+  </div>
+
+  <script>
+    const signinModal = document.getElementById("signin-modal");
+    const submissionModal = document.getElementById("submission-modal");
+    const openSigninButton = document.querySelector("[data-open-signin]");
+    const closeSigninButton = document.querySelector("[data-close-signin]");
+    const demoForm = document.getElementById("demo-form");
+    const emailSigninToggle = document.getElementById("email-signin-toggle");
+    const emailSigninForm = document.getElementById("email-signin-form");
+    const backHomeButton = document.getElementById("back-home-button");
+
+    function openSigninModal(event) {
+      event.preventDefault();
+      signinModal.classList.add("is-open");
+      signinModal.setAttribute("aria-hidden", "false");
+    }
+
+    function closeSigninModal() {
+      signinModal.classList.remove("is-open");
+      signinModal.setAttribute("aria-hidden", "true");
+    }
+
+    function openSubmissionModal() {
+      submissionModal.classList.add("is-open");
+      submissionModal.setAttribute("aria-hidden", "false");
+    }
+
+    function closeSubmissionModal() {
+      submissionModal.classList.remove("is-open");
+      submissionModal.setAttribute("aria-hidden", "true");
+    }
+
+    openSigninButton.addEventListener("click", openSigninModal);
+    closeSigninButton.addEventListener("click", closeSigninModal);
+
+    signinModal.addEventListener("click", function (event) {
+      if (event.target === signinModal) {
+        closeSigninModal();
+      }
+    });
+
+    submissionModal.addEventListener("click", function (event) {
+      if (event.target === submissionModal) {
+        closeSubmissionModal();
+      }
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && signinModal.classList.contains("is-open")) {
+        closeSigninModal();
+      }
+
+      if (event.key === "Escape" && submissionModal.classList.contains("is-open")) {
+        closeSubmissionModal();
+      }
+    });
+
+    backHomeButton.addEventListener("click", function () {
+      closeSubmissionModal();
+      window.location.href = "#top";
+    });
+
+    emailSigninToggle.addEventListener("click", function () {
+      emailSigninForm.classList.toggle("is-open");
+    });
+
+    emailSigninForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      const email = new FormData(emailSigninForm).get("signin-email");
+      alert("Email sign-in request received for: " + email);
+      emailSigninForm.reset();
+      emailSigninForm.classList.remove("is-open");
+      closeSigninModal();
+    });
+
+    demoForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const formData = new FormData(demoForm);
+      const submission = {
+        id: Date.now(),
+        studentName: formData.get("studentName"),
+        studentPhone: formData.get("studentPhone"),
+        studentClass: formData.get("studentClass"),
+        batchTiming: formData.get("batchTiming"),
+        message: formData.get("message"),
+        submittedAt: new Date().toLocaleString()
+      };
+
+      const existingEntries = JSON.parse(localStorage.getItem("radiantDemoRequests") || "[]");
+      existingEntries.unshift(submission);
+      localStorage.setItem("radiantDemoRequests", JSON.stringify(existingEntries));
+
+      demoForm.reset();
+      openSubmissionModal();
+    });
+  </script>
+</body>
+</html>
