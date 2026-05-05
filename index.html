@@ -51,9 +51,30 @@
         linear-gradient(180deg, #fff7eb 0%, #fdfdfd 45%, #eef9f6 100%);
     }
 
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.45), transparent 18%),
+        radial-gradient(circle at 82% 74%, rgba(15, 123, 108, 0.08), transparent 20%);
+      opacity: 0.9;
+      z-index: -1;
+    }
+
     a {
       color: inherit;
       text-decoration: none;
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible {
+      outline: 3px solid rgba(241, 90, 36, 0.35);
+      outline-offset: 3px;
     }
 
     img {
@@ -71,8 +92,15 @@
       top: 0;
       z-index: 20;
       backdrop-filter: blur(18px);
-      background: rgba(255, 249, 241, 0.82);
+      background: linear-gradient(180deg, rgba(255, 249, 241, 0.92), rgba(255, 249, 241, 0.78));
       border-bottom: 1px solid rgba(24, 33, 47, 0.06);
+    }
+
+    .site-header::after {
+      content: "";
+      display: block;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(241, 90, 36, 0), rgba(241, 90, 36, 0.55), rgba(15, 123, 108, 0.45), rgba(241, 90, 36, 0));
     }
 
     .nav {
@@ -137,6 +165,16 @@
       transform: translateY(-2px);
     }
 
+    .button:disabled {
+      opacity: 0.7;
+      cursor: wait;
+      transform: none;
+    }
+
+    .button:focus-visible {
+      box-shadow: 0 0 0 4px rgba(241, 90, 36, 0.16), 0 14px 32px rgba(241, 90, 36, 0.25);
+    }
+
     .button-primary {
       color: #fff;
       background: linear-gradient(135deg, var(--primary), #ff7b2c);
@@ -167,6 +205,20 @@
 
     .hero {
       padding: 5rem 0 4rem;
+      position: relative;
+      overflow: clip;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 1rem auto auto -6rem;
+      width: 18rem;
+      height: 18rem;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 214, 107, 0.22), transparent 68%);
+      filter: blur(8px);
+      pointer-events: none;
     }
 
     .hero-grid {
@@ -263,6 +315,12 @@
       box-shadow: var(--shadow);
       overflow: hidden;
       min-width: 0;
+      transition: transform 0.28s ease, box-shadow 0.28s ease;
+    }
+
+    .hero-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 28px 80px rgba(28, 36, 52, 0.16);
     }
 
     .hero-card::before,
@@ -352,6 +410,8 @@
       align-items: end;
       gap: 1rem;
       margin-bottom: 1.5rem;
+      padding-bottom: 0.95rem;
+      border-bottom: 1px solid rgba(24, 33, 47, 0.08);
     }
 
     .section-head h2 {
@@ -388,6 +448,15 @@
       border: 1px solid var(--line);
       box-shadow: var(--shadow);
       backdrop-filter: blur(18px);
+      transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+    }
+
+    .card:hover,
+    .info-card:hover,
+    .form-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(241, 90, 36, 0.22);
+      box-shadow: 0 28px 72px rgba(28, 36, 52, 0.14);
     }
 
     .card h3,
@@ -425,7 +494,7 @@
     .subject-pills span {
       padding: 0.7rem 0.95rem;
       border-radius: 999px;
-      background: #fff;
+      background: linear-gradient(180deg, #fff, #fff8f2);
       border: 1px solid rgba(24, 33, 47, 0.08);
       font-weight: 600;
     }
@@ -453,6 +522,23 @@
       color: #fff;
       box-shadow: var(--shadow);
       min-width: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-band::before {
+      content: "";
+      position: absolute;
+      inset: auto -4rem -5rem auto;
+      width: 14rem;
+      height: 14rem;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 214, 107, 0.16), transparent 68%);
+    }
+
+    .contact-band > * {
+      position: relative;
+      z-index: 1;
     }
 
     .contact-band .section-copy,
@@ -460,6 +546,11 @@
     .contact-band li,
     .contact-band a {
       color: rgba(255, 255, 255, 0.82);
+    }
+
+    .contact-tag {
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
     }
 
     .form-card {
@@ -496,7 +587,6 @@
       background: #fff;
       font: inherit;
       color: var(--text);
-      outline: none;
       transition: border-color 0.25s ease, box-shadow 0.25s ease;
     }
 
@@ -505,6 +595,23 @@
     textarea:focus {
       border-color: rgba(241, 90, 36, 0.65);
       box-shadow: 0 0 0 4px rgba(241, 90, 36, 0.12);
+    }
+
+    .skip-link {
+      position: absolute;
+      left: 1rem;
+      top: -3.5rem;
+      z-index: 200;
+      padding: 0.75rem 1rem;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid rgba(24, 33, 47, 0.12);
+      box-shadow: 0 12px 24px rgba(24, 33, 47, 0.12);
+      font-weight: 700;
+    }
+
+    .skip-link:focus {
+      top: 1rem;
     }
 
     textarea {
@@ -611,6 +718,10 @@
       border-top: 1px solid rgba(24, 33, 47, 0.08);
     }
 
+    .footer-actions {
+      margin-top: 0;
+    }
+
     .reveal {
       opacity: 0;
       transform: translateY(24px);
@@ -626,6 +737,29 @@
       to {
         opacity: 1;
         transform: translateY(0);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+
+      .reveal {
+        opacity: 1;
+        transform: none;
+        animation: none;
+      }
+
+      .button:hover {
+        transform: none;
       }
     }
 
@@ -754,6 +888,7 @@
   </style>
 </head>
 <body>
+  <a class="skip-link" href="#top">Skip to content</a>
   <header class="site-header">
     <div class="container nav">
       <a class="brand" href="#top">
@@ -926,7 +1061,7 @@
     <section id="contact">
       <div class="container grid contact-grid">
         <div class="contact-band reveal">
-          <div class="tag" style="background: rgba(255,255,255,0.14); color: #fff;">Visit or call us</div>
+          <div class="tag contact-tag">Visit or call us</div>
           <h2>RADIANT CLASSES</h2>
           <p class="section-copy">
             Helping students in Bokaro build stronger basics and better academic confidence from Class 5th to 10th.
@@ -950,15 +1085,15 @@
             Fill in the details and Radiant Classes can contact you about your free demo session and batch timing.
           </p>
 
-          <form id="demo-form">
+      <form id="demo-form">
             <div class="field-grid">
               <label>
                 Student Name
-                <input type="text" name="studentName" placeholder="Enter student name" required>
+                <input type="text" name="studentName" placeholder="Enter student name" autocomplete="name" required>
               </label>
               <label>
                 Student Phone
-                <input type="tel" name="studentPhone" placeholder="Enter phone number" required>
+                <input type="tel" name="studentPhone" placeholder="Enter phone number" autocomplete="tel" inputmode="tel" required>
               </label>
             </div>
 
@@ -992,7 +1127,7 @@
               <textarea name="message" placeholder="Share preferred timing or any question"></textarea>
             </label>
 
-            <button class="button button-primary" type="submit">Book Free Demo Session</button>
+            <button class="button button-primary" type="submit" id="demo-submit-button">Book Free Demo Session</button>
             <p class="mini-note">
               For faster response, call <a href="tel:8986840972">8986840972</a> directly.
             </p>
@@ -1008,7 +1143,7 @@
         <strong>Radiant Classes</strong>
         <p class="footer-note">Coaching for Class 5th to 10th in Bokaro Steel City, Jharkhand.</p>
       </div>
-      <div class="hero-actions" style="margin-top: 0;">
+      <div class="hero-actions footer-actions">
         <a class="button button-secondary" href="admin.html">Admin Panel</a>
         <a class="button button-secondary" href="#top">Back to top</a>
       </div>
@@ -1027,10 +1162,10 @@
       <form id="mobile-signin-form">
         <label>
           Mobile Number
-          <input type="tel" name="signin-mobile" placeholder="Enter mobile number" required>
+          <input type="tel" name="signin-mobile" placeholder="Enter mobile number" autocomplete="tel" inputmode="tel" required>
         </label>
-        <button class="button button-primary" type="submit">Continue with Mobile Number</button>
-        <p class="form-status" id="mobile-signin-status" hidden></p>
+        <button class="button button-primary" type="submit" id="mobile-signin-button">Continue with Mobile Number</button>
+        <p class="form-status" id="mobile-signin-status" hidden aria-live="polite"></p>
       </form>
 
       <div class="modal-actions">
@@ -1041,14 +1176,14 @@
       <form class="email-signin" id="email-signin-form">
         <label>
           Email Address
-          <input type="email" name="signin-email" placeholder="Enter email address" required>
+          <input type="email" name="signin-email" placeholder="Enter email address" autocomplete="email" required>
         </label>
         <label>
           Password
-          <input type="password" name="signin-password" placeholder="Enter password" required>
+          <input type="password" name="signin-password" placeholder="Enter password" autocomplete="current-password" required>
         </label>
-        <button class="button button-primary" type="submit">Continue with Email</button>
-        <p class="form-status" id="email-signin-status" hidden></p>
+        <button class="button button-primary" type="submit" id="email-signin-button">Continue with Email</button>
+        <p class="form-status" id="email-signin-status" hidden aria-live="polite"></p>
       </form>
     </div>
   </div>
@@ -1086,11 +1221,14 @@
     const openSigninButton = document.querySelector("[data-open-signin]");
     const closeSigninButton = document.querySelector("[data-close-signin]");
     const demoForm = document.getElementById("demo-form");
+    const demoSubmitButton = document.getElementById("demo-submit-button");
     const mobileSigninForm = document.getElementById("mobile-signin-form");
+    const mobileSigninButton = document.getElementById("mobile-signin-button");
     const mobileSigninStatus = document.getElementById("mobile-signin-status");
     const googleSigninButton = document.getElementById("google-signin-button");
     const emailSigninToggle = document.getElementById("email-signin-toggle");
     const emailSigninForm = document.getElementById("email-signin-form");
+    const emailSigninButton = document.getElementById("email-signin-button");
     const emailSigninStatus = document.getElementById("email-signin-status");
     const backHomeButton = document.getElementById("back-home-button");
     const firebaseConfig = window.RADIANT_FIREBASE_CONFIG || {};
@@ -1122,6 +1260,16 @@
       element.hidden = true;
       element.textContent = "";
       element.classList.remove("is-error");
+    }
+
+    function setButtonLoading(button, isLoading, loadingLabel) {
+      if (!button.dataset.defaultLabel) {
+        button.dataset.defaultLabel = button.textContent || "";
+      }
+
+      button.disabled = isLoading;
+      button.textContent = isLoading ? loadingLabel : button.dataset.defaultLabel;
+      button.setAttribute("aria-busy", String(isLoading));
     }
 
     function openSigninModal(event) {
@@ -1184,6 +1332,8 @@
         return;
       }
 
+      setButtonLoading(mobileSigninButton, true, "Saving...");
+
       try {
         const formData = new FormData(mobileSigninForm);
         await addDoc(collection(db, "signinRequests"), {
@@ -1195,6 +1345,8 @@
         updateStatus(mobileSigninStatus, "Mobile sign-in request received. We will contact you soon.", false);
       } catch (error) {
         updateStatus(mobileSigninStatus, error.message || "Could not save the mobile sign-in request right now.", true);
+      } finally {
+        setButtonLoading(mobileSigninButton, false);
       }
     });
 
@@ -1206,6 +1358,8 @@
         return;
       }
 
+      setButtonLoading(googleSigninButton, true, "Connecting...");
+
       try {
         await signInWithPopup(auth, googleProvider);
         emailSigninForm.reset();
@@ -1213,6 +1367,8 @@
         closeSigninModal();
       } catch (error) {
         updateStatus(emailSigninStatus, error.message || "Google sign-in could not be completed.", true);
+      } finally {
+        setButtonLoading(googleSigninButton, false);
       }
     });
 
@@ -1233,20 +1389,29 @@
       const email = String(formData.get("signin-email") || "").trim();
       const password = String(formData.get("signin-password") || "");
 
+      setButtonLoading(emailSigninButton, true, "Signing in...");
+
+      let signedIn = false;
       try {
         await signInWithEmailAndPassword(auth, email, password);
+        signedIn = true;
       } catch (error) {
         if (error.code === "auth/invalid-credential" || error.code === "auth/user-not-found") {
           try {
             await createUserWithEmailAndPassword(auth, email, password);
+            signedIn = true;
           } catch (createError) {
             updateStatus(emailSigninStatus, createError.message || "Email sign-in could not be completed.", true);
-            return;
           }
         } else {
           updateStatus(emailSigninStatus, error.message || "Email sign-in could not be completed.", true);
-          return;
         }
+      } finally {
+        setButtonLoading(emailSigninButton, false);
+      }
+
+      if (!signedIn) {
+        return;
       }
 
       emailSigninForm.reset();
@@ -1261,6 +1426,8 @@
         alert("Firebase setup is still pending. Add your Firebase config to enable online demo submissions.");
         return;
       }
+
+      setButtonLoading(demoSubmitButton, true, "Submitting...");
 
       const formData = new FormData(demoForm);
       try {
@@ -1279,6 +1446,8 @@
         openSubmissionModal();
       } catch (error) {
         alert(error.message || "Your submission could not be saved right now. Please try again.");
+      } finally {
+        setButtonLoading(demoSubmitButton, false);
       }
     });
   </script>
