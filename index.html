@@ -36,12 +36,15 @@
 
     html {
       scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
     }
 
     body {
       margin: 0;
       font-family: "Outfit", sans-serif;
       color: var(--text);
+      min-width: 320px;
+      overflow-x: hidden;
       background:
         radial-gradient(circle at top left, rgba(255, 214, 107, 0.75), transparent 28%),
         radial-gradient(circle at 85% 15%, rgba(241, 90, 36, 0.18), transparent 22%),
@@ -59,7 +62,7 @@
     }
 
     .container {
-      width: min(var(--max), calc(100% - 2rem));
+      width: min(var(--max), calc(100% - 1.5rem));
       margin: 0 auto;
     }
 
@@ -104,9 +107,15 @@
     .nav-links {
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
       gap: 1.2rem;
       color: var(--muted);
       font-weight: 500;
+    }
+
+    .nav-links a {
+      display: inline-flex;
+      align-items: center;
     }
 
     .button {
@@ -217,6 +226,10 @@
       margin-top: 1.8rem;
     }
 
+    .hero-actions .button {
+      flex: 1 1 220px;
+    }
+
     .hero-stats {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -249,6 +262,7 @@
       border: 1px solid rgba(24, 33, 47, 0.08);
       box-shadow: var(--shadow);
       overflow: hidden;
+      min-width: 0;
     }
 
     .hero-card::before,
@@ -329,7 +343,7 @@
     }
 
     section {
-      padding: 2rem 0 4rem;
+      padding: clamp(1.75rem, 4vw, 4rem) 0;
     }
 
     .section-head {
@@ -352,6 +366,10 @@
     .grid {
       display: grid;
       gap: 1.35rem;
+    }
+
+    .grid > * {
+      min-width: 0;
     }
 
     .about-grid,
@@ -434,6 +452,7 @@
         linear-gradient(135deg, #172234, #195c4b);
       color: #fff;
       box-shadow: var(--shadow);
+      min-width: 0;
     }
 
     .contact-band .section-copy,
@@ -527,6 +546,8 @@
       box-shadow: 0 28px 60px rgba(0, 0, 0, 0.2);
       border: 1px solid rgba(24, 33, 47, 0.08);
       position: relative;
+      max-height: calc(100vh - 2rem);
+      overflow-y: auto;
     }
 
     .modal-close {
@@ -627,13 +648,32 @@
     @media (max-width: 760px) {
       .nav {
         flex-wrap: wrap;
+        align-items: stretch;
+      }
+
+      .brand {
+        width: 100%;
       }
 
       .nav-links {
         width: 100%;
-        justify-content: space-between;
-        gap: 0.8rem;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.6rem;
         font-size: 0.92rem;
+      }
+
+      .nav-links a:not(.button) {
+        justify-content: center;
+        text-align: center;
+        padding: 0.55rem 0.7rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(24, 33, 47, 0.08);
+      }
+
+      .nav-links .button {
+        grid-column: 1 / -1;
       }
 
       .hero {
@@ -648,12 +688,67 @@
         font-size: clamp(2.4rem, 12vw, 3.6rem);
       }
 
+      .hero-actions .button {
+        flex: 1 1 100%;
+      }
+
       .contact-band,
       .card,
       .info-card,
       .form-card,
       .hero-card {
         padding: 1.25rem;
+      }
+
+      .modal {
+        padding: 0.75rem;
+      }
+
+      .modal-card {
+        width: 100%;
+        padding: 1.25rem;
+        border-radius: 24px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .container {
+        width: min(var(--max), calc(100% - 1rem));
+      }
+
+      .nav-links {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-links .button {
+        grid-column: auto;
+      }
+
+      .hero-actions,
+      .modal-actions {
+        gap: 0.7rem;
+      }
+
+      .hero-actions .button,
+      .modal-actions .button {
+        width: 100%;
+      }
+
+      .contact-band {
+        padding: 1.1rem;
+        border-radius: 26px;
+      }
+
+      .feature-list li,
+      .course-list li,
+      .contact-list li {
+        gap: 0.65rem;
+      }
+
+      .bullet {
+        width: 1.6rem;
+        height: 1.6rem;
+        flex-basis: 1.6rem;
       }
     }
   </style>
@@ -963,7 +1058,7 @@
       <div class="tag">RADIANT CLASSES</div>
       <h3>Thank you</h3>
       <p class="confirmation-copy">
-        Your submission has been recieved. We will be in touch and contact you soon.
+        Your submission has been received. We will be in touch and contact you soon.
       </p>
       <button class="button button-primary" type="button" id="back-home-button">Back Home</button>
     </div>
@@ -1077,7 +1172,7 @@
 
     backHomeButton.addEventListener("click", function () {
       closeSubmissionModal();
-      window.location.href = "#top";
+      window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
     mobileSigninForm.addEventListener("submit", async function (event) {
