@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Radiant Classes Admin Panel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --surface: #ffffff;
+      --text: #1a2433;
+      --muted: #647084;
+      --primary: #f15a24;
+      --secondary: #11805d;
+      --line: rgba(26, 36, 51, 0.08);
+      --shadow: 0 24px 56px rgba(24, 33, 47, 0.1);
+      --radius-xl: 24px;
+      --radius-lg: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Outfit", sans-serif;
+      color: var(--text);
+      min-width: 320px;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at top right, rgba(241, 90, 36, 0.08), transparent 24%),
+        linear-gradient(180deg, #fffefb 0%, #f6f7fb 46%, #edf8f3 100%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 14% 18%, rgba(255, 255, 255, 0.46), transparent 18%),
+        radial-gradient(circle at 78% 72%, rgba(17, 128, 93, 0.08), transparent 22%);
+      z-index: -1;
+    }
+
+    .container {
+      width: min(1180px, calc(100% - 1.5rem));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      padding: 1.2rem 0;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.82));
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .topbar::after {
+      content: "";
+      display: block;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(241, 90, 36, 0), rgba(241, 90, 36, 0.55), rgba(17, 128, 93, 0.45), rgba(241, 90, 36, 0));
+    }
+
+    .topbar-inner,
+    .hero-actions,
+    .stats-grid,
+    .panel-grid,
+    .header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .topbar-inner {
+      align-items: stretch;
+    }
+
+    .brand {
+      font-family: "Sora", sans-serif;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0.85rem 1.2rem;
+      border-radius: 999px;
+      border: 0;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+    }
+
+    .button:disabled {
+      opacity: 0.7;
+      cursor: wait;
+      transform: none;
+    }
+
+    .button:focus-visible,
+    input:focus-visible,
+    button:focus-visible,
+    a:focus-visible {
+      outline: 3px solid rgba(241, 90, 36, 0.34);
+      outline-offset: 3px;
+    }
+
+    .button:focus-visible {
+      box-shadow: 0 0 0 4px rgba(241, 90, 36, 0.14);
+    }
+
+    .button-primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), #ff7d37);
+      box-shadow: 0 14px 28px rgba(241, 90, 36, 0.24);
+    }
+
+    .button-secondary {
+      color: var(--text);
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 24px rgba(24, 33, 47, 0.06);
+    }
+
+    .hero-actions .button {
+      flex: 1 1 180px;
+    }
+
+    main {
+      padding: 2rem 0 3rem;
+    }
+
+    .hero-card,
+    .panel,
+    .table-card {
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
+    }
+
+    .hero-card:hover,
+    .panel:hover,
+    .table-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(241, 90, 36, 0.18);
+      box-shadow: 0 28px 64px rgba(24, 33, 47, 0.12);
+    }
+
+    .hero-card {
+      padding: 1.8rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: auto -2rem -5rem auto;
+      width: 13rem;
+      height: 13rem;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(241, 90, 36, 0.11), transparent 68%);
+      pointer-events: none;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      font-family: "Sora", sans-serif;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      margin-top: 0.5rem;
+    }
+
+    p {
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .stats-grid {
+      margin-top: 1.5rem;
+    }
+
+    .stat {
+      flex: 1 1 220px;
+      padding: 1.2rem;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, #fff, #fff8f4);
+      border: 1px solid var(--line);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    .stat strong {
+      display: block;
+      font-family: "Sora", sans-serif;
+      font-size: 1.8rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .panel-grid {
+      align-items: stretch;
+      margin-bottom: 1.5rem;
+    }
+
+    .panel {
+      flex: 1 1 320px;
+      padding: 1.4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, rgba(241, 90, 36, 0.28), rgba(17, 128, 93, 0.28));
+    }
+
+    label {
+      display: grid;
+      gap: 0.45rem;
+      font-weight: 600;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      font: inherit;
+    }
+
+    .table-card {
+      padding: 1.4rem;
+      overflow: hidden;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 860px;
+    }
+
+    th,
+    td {
+      padding: 1rem 0.85rem;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    tbody tr:hover {
+      background: rgba(241, 90, 36, 0.04);
+    }
+
+    .empty-state {
+      padding: 2rem 1rem;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.45rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(17, 128, 93, 0.1);
+      color: var(--secondary);
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .small-button {
+      padding: 0.55rem 0.85rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fff;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 700;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .login-shell {
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      padding: 2rem 1rem;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: 1rem;
+      top: -3.5rem;
+      z-index: 200;
+      padding: 0.75rem 1rem;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid rgba(24, 33, 47, 0.12);
+      box-shadow: 0 12px 24px rgba(24, 33, 47, 0.12);
+      font-weight: 700;
+    }
+
+    .skip-link:focus {
+      top: 1rem;
+    }
+
+    .login-card {
+      width: min(100%, 460px);
+      padding: 1.8rem;
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-card::before {
+      content: "";
+      position: absolute;
+      inset: auto -3rem -4rem auto;
+      width: 11rem;
+      height: 11rem;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(17, 128, 93, 0.09), transparent 68%);
+    }
+
+    .login-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .login-card form {
+      display: grid;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .login-note {
+      margin: 0.9rem 0 0;
+      color: #c23f15;
+      font-weight: 600;
+    }
+
+    .inline-note {
+      margin-top: 0.85rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .table-header {
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 720px) {
+      .container {
+        width: min(1180px, calc(100% - 1rem));
+      }
+
+      main {
+        padding-top: 1.25rem;
+      }
+
+      .brand {
+        width: 100%;
+      }
+
+      .hero-actions {
+        width: 100%;
+      }
+
+      .hero-actions .button {
+        width: 100%;
+        flex: 1 1 100%;
+      }
+
+      .stat,
+      .panel {
+        flex: 1 1 100%;
+      }
+
+      .hero-card,
+      .panel,
+      .table-card {
+        padding: 1.1rem;
+      }
+
+      table {
+        min-width: 760px;
+      }
+
+      th,
+      td {
+        padding: 0.85rem 0.7rem;
+      }
+
+      .small-button {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .topbar {
+        padding: 0.9rem 0;
+      }
+
+      .hero-card {
+        border-radius: 20px;
+      }
+
+      .login-shell {
+        padding: 1rem;
+      }
+
+      .login-card {
+        padding: 1.25rem;
+        border-radius: 20px;
+      }
+
+      .stat strong {
+        font-size: 1.55rem;
+      }
+    }
+
+    /* Device-width refinements */
+    @media (max-width: 720px) {
+      .container {
+        width: calc(100% - 2rem);
+      }
+
+      .topbar-inner {
+        gap: 0.75rem;
+      }
+
+      .topbar-inner .hero-actions {
+        width: 100%;
+      }
+
+      .topbar-inner .hero-actions .button {
+        flex: 1 1 0;
+        min-width: 0;
+      }
+
+      .header-row {
+        align-items: flex-start;
+      }
+
+      .table-header .hero-actions {
+        width: 100%;
+      }
+
+      .table-header .hero-actions input {
+        min-width: 0;
+      }
+
+      .table-wrap {
+        margin: 0 -0.1rem;
+        scrollbar-width: thin;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .container {
+        width: calc(100% - 1.25rem);
+      }
+
+      .brand {
+        font-size: 0.9rem;
+      }
+
+      h1 {
+        font-size: 2.25rem;
+        line-height: 1.05;
+      }
+
+      .hero-card,
+      .panel,
+      .table-card {
+        border-radius: 12px;
+      }
+
+      .topbar-inner .hero-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .topbar-inner .hero-actions .button:last-child {
+        grid-column: 1 / -1;
+      }
+
+      .table-header .hero-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .table-header .hero-actions input,
+      .table-header .hero-actions .button {
+        width: 100%;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .stat {
+        min-width: 0;
+      }
+
+      .stat:last-child {
+        grid-column: 1 / -1;
+      }
+
+      .stat strong {
+        font-size: 1.4rem;
+        overflow-wrap: anywhere;
+      }
+
+      .panel p,
+      .hero-card p {
+        overflow-wrap: anywhere;
+      }
+
+      table {
+        min-width: 700px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .topbar-inner .hero-actions {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar-inner .hero-actions .button:last-child {
+        grid-column: auto;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stat:last-child {
+        grid-column: auto;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+
+      .button:hover {
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <section class="login-shell" id="login-screen">
+    <div class="login-card">
+      <span class="badge">Secure Access</span>
+      <h1>Admin panel login</h1>
+      <p>Enter your admin ID and password to view free demo session data.</p>
+
+      <form id="login-form">
+        <label>
+          Admin Email
+          <input id="admin-id" type="email" placeholder="Enter admin email" autocomplete="email" required>
+        </label>
+        <label>
+          Password
+          <input id="admin-password" type="password" placeholder="Enter password" autocomplete="current-password" required>
+        </label>
+        <button class="button button-primary" type="submit" id="login-button">Login</button>
+      </form>
+
+      <p class="login-note hidden" id="login-error" aria-live="polite">Invalid ID or password. Please try again.</p>
+      <p class="inline-note">Use the Firebase admin email configured for this project.</p>
+    </div>
+  </section>
+
+  <div id="admin-app" class="hidden">
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand">Radiant Classes Admin Panel</div>
+      <div class="hero-actions">
+        <a class="button button-secondary" href="index.html">Back to Website</a>
+        <button class="button button-secondary" id="logout-button" type="button">Logout</button>
+        <button class="button button-primary" id="clear-all" type="button">Clear All Entries</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <div class="container">
+      <section class="hero-card">
+        <span class="badge">Book Free Demo Session Data</span>
+        <h1>View student enquiries in one place</h1>
+        <p>
+          This admin page reads form submissions saved from the website and shows student name, phone, class,
+          batch timing, message, and submission time.
+        </p>
+
+        <div class="stats-grid">
+          <div class="stat">
+            <strong id="total-entries">0</strong>
+            <span>Total enquiries</span>
+          </div>
+          <div class="stat">
+            <strong id="today-entries">0</strong>
+            <span>Entries added today</span>
+          </div>
+          <div class="stat">
+            <strong id="class-summary">-</strong>
+            <span>Most requested class</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel-grid">
+        <div class="panel">
+          <div class="header-row">
+            <div>
+              <h3>Search entries</h3>
+              <p>Filter by student name, phone, class, or batch timing.</p>
+            </div>
+          </div>
+          <label>
+            Search
+            <input id="search-input" type="text" placeholder="Type to search..." autocomplete="off">
+          </label>
+        </div>
+
+        <div class="panel">
+          <h3>How it works</h3>
+          <p>
+            Every time someone submits the demo form on the main website, the data is stored in Firebase
+            Firestore. Sign in with the configured admin account to view the latest entries here.
+          </p>
+        </div>
+      </section>
+
+      <section class="table-card">
+        <div class="header-row table-header">
+          <div>
+            <h3>Demo session enquiries</h3>
+            <p>Newest submissions appear first.</p>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Student Name</th>
+                <th>Phone</th>
+                <th>Class</th>
+                <th>Batch Timing</th>
+                <th>Message</th>
+                <th>Submitted At</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="entries-body"></tbody>
+          </table>
+        </div>
+
+        <div class="empty-state" id="empty-state" hidden>
+          No demo session entries found yet.
+        </div>
+      </section>
+    </div>
+  </main>
+  </div>
+
+  <script src="firebase-config.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signInWithEmailAndPassword,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import {
+      collection,
+      deleteDoc,
+      doc,
+      getDocs,
+      getFirestore,
+      orderBy,
+      query
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = window.RADIANT_FIREBASE_CONFIG || {};
+    const configuredAdminEmail = window.RADIANT_ADMIN_EMAIL || "admin@example.com";
+    const firebaseReady = Boolean(
+      firebaseConfig.apiKey &&
+      firebaseConfig.projectId &&
+      !firebaseConfig.apiKey.startsWith("YOUR_") &&
+      !firebaseConfig.projectId.startsWith("YOUR_")
+    );
+
+    const loginScreen = document.getElementById("login-screen");
+    const adminApp = document.getElementById("admin-app");
+    const loginForm = document.getElementById("login-form");
+    const adminIdInput = document.getElementById("admin-id");
+    const adminPasswordInput = document.getElementById("admin-password");
+    const loginButton = document.getElementById("login-button");
+    const loginError = document.getElementById("login-error");
+    const logoutButton = document.getElementById("logout-button");
+    const entriesBody = document.getElementById("entries-body");
+    const emptyState = document.getElementById("empty-state");
+    const searchInput = document.getElementById("search-input");
+    const clearAllButton = document.getElementById("clear-all");
+    const totalEntries = document.getElementById("total-entries");
+    const todayEntries = document.getElementById("today-entries");
+    const classSummary = document.getElementById("class-summary");
+    let auth = null;
+    let db = null;
+    let allEntries = [];
+
+    if (firebaseReady) {
+      const app = initializeApp(firebaseConfig);
+      auth = getAuth(app);
+      db = getFirestore(app);
+    }
+
+    function showAdminPanel() {
+      loginScreen.classList.add("hidden");
+      adminApp.classList.remove("hidden");
+    }
+
+    function showLoginScreen() {
+      adminApp.classList.add("hidden");
+      loginScreen.classList.remove("hidden");
+    }
+
+    function setButtonLoading(button, isLoading, loadingLabel) {
+      if (!button.dataset.defaultLabel) {
+        button.dataset.defaultLabel = button.textContent || "";
+      }
+
+      button.disabled = isLoading;
+      button.textContent = isLoading ? loadingLabel : button.dataset.defaultLabel;
+      button.setAttribute("aria-busy", String(isLoading));
+    }
+
+    function isToday(dateText) {
+      const entryDate = new Date(dateText || "");
+      const now = new Date();
+      if (Number.isNaN(entryDate.getTime())) {
+        return false;
+      }
+      return entryDate.toDateString() === now.toDateString();
+    }
+
+    function getMostRequestedClass(entries) {
+      if (!entries.length) {
+        return "-";
+      }
+
+      const counts = {};
+      entries.forEach(function (entry) {
+        counts[entry.studentClass] = (counts[entry.studentClass] || 0) + 1;
+      });
+
+      return Object.keys(counts).sort(function (a, b) {
+        return counts[b] - counts[a];
+      })[0];
+    }
+
+    function updateStats(entries) {
+      totalEntries.textContent = entries.length;
+      todayEntries.textContent = entries.filter(function (entry) {
+        return isToday(entry.submittedAt);
+      }).length;
+      classSummary.textContent = getMostRequestedClass(entries);
+    }
+
+    function deleteEntry(id) {
+      return deleteDoc(doc(db, "demoRequests", id));
+    }
+
+    function normalizeEntry(documentSnapshot) {
+      const data = documentSnapshot.data();
+      const submittedAt = data.submittedAt && typeof data.submittedAt.toDate === "function"
+        ? data.submittedAt.toDate().toLocaleString()
+        : (data.submittedAtLabel || "-");
+
+      return {
+        id: documentSnapshot.id,
+        studentName: data.studentName || "-",
+        studentPhone: data.studentPhone || "-",
+        studentClass: data.studentClass || "-",
+        batchTiming: data.batchTiming || "-",
+        message: data.message || "-",
+        submittedAt: submittedAt
+      };
+    }
+
+    async function loadEntries() {
+      if (!db) {
+        return;
+      }
+
+      const entriesQuery = query(collection(db, "demoRequests"), orderBy("submittedAt", "desc"));
+      const snapshot = await getDocs(entriesQuery);
+      allEntries = snapshot.docs.map(normalizeEntry);
+      renderEntries();
+    }
+
+    function renderEntries() {
+      const searchTerm = searchInput.value.trim().toLowerCase();
+      const filteredEntries = allEntries.filter(function (entry) {
+        const combined = [
+          entry.studentName,
+          entry.studentPhone,
+          entry.studentClass,
+          entry.batchTiming,
+          entry.message,
+          entry.submittedAt
+        ].join(" ").toLowerCase();
+
+        return combined.includes(searchTerm);
+      });
+
+      updateStats(allEntries);
+      entriesBody.innerHTML = "";
+
+      if (!filteredEntries.length) {
+        emptyState.hidden = false;
+        return;
+      }
+
+      emptyState.hidden = true;
+
+      filteredEntries.forEach(function (entry) {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${entry.studentName || "-"}</td>
+          <td>${entry.studentPhone || "-"}</td>
+          <td>${entry.studentClass || "-"}</td>
+          <td>${entry.batchTiming || "-"}</td>
+          <td>${entry.message || "-"}</td>
+          <td>${entry.submittedAt || "-"}</td>
+          <td><button class="small-button" type="button" data-entry-id="${entry.id}">Delete</button></td>
+        `;
+        entriesBody.appendChild(row);
+      });
+
+      document.querySelectorAll("[data-entry-id]").forEach(function (button) {
+        button.addEventListener("click", async function () {
+          await deleteEntry(button.getAttribute("data-entry-id"));
+          await loadEntries();
+        });
+      });
+    }
+
+    searchInput.addEventListener("input", renderEntries);
+
+    clearAllButton.addEventListener("click", async function () {
+      const confirmed = window.confirm("Delete all demo session entries from the admin panel?");
+      if (!confirmed) {
+        return;
+      }
+
+      setButtonLoading(clearAllButton, true, "Clearing...");
+
+      try {
+        for (const entry of allEntries) {
+          await deleteEntry(entry.id);
+        }
+
+        await loadEntries();
+      } finally {
+        setButtonLoading(clearAllButton, false);
+      }
+    });
+
+    loginForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      if (!auth) {
+        loginError.textContent = "Firebase config is missing. Add your Firebase project settings first.";
+        loginError.classList.remove("hidden");
+        return;
+      }
+
+      const enteredId = adminIdInput.value.trim();
+      const enteredPassword = adminPasswordInput.value;
+
+      setButtonLoading(loginButton, true, "Checking...");
+
+      try {
+        const credential = await signInWithEmailAndPassword(auth, enteredId, enteredPassword);
+
+        if (credential.user.email !== configuredAdminEmail) {
+          await signOut(auth);
+          loginError.textContent = "This account is not allowed to access the admin panel.";
+          loginError.classList.remove("hidden");
+          return;
+        }
+
+        loginError.classList.add("hidden");
+        loginForm.reset();
+        showAdminPanel();
+        await loadEntries();
+      } catch (error) {
+        loginError.textContent = error.message || "Invalid ID or password. Please try again.";
+        loginError.classList.remove("hidden");
+      } finally {
+        setButtonLoading(loginButton, false);
+      }
+    });
+
+    logoutButton.addEventListener("click", async function () {
+      if (auth) {
+        await signOut(auth);
+      }
+      allEntries = [];
+      showLoginScreen();
+    });
+
+    if (!auth) {
+      showLoginScreen();
+    } else {
+      onAuthStateChanged(auth, async function (user) {
+        if (user && user.email === configuredAdminEmail) {
+          loginError.classList.add("hidden");
+          showAdminPanel();
+          await loadEntries();
+          return;
+        }
+
+        allEntries = [];
+        showLoginScreen();
+      });
+    }
+  </script>
+</body>
+</html>
